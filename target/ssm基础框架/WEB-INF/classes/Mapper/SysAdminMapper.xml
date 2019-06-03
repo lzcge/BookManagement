@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzcge.Mapper.SysAdminMapper">
+
+    <select id="checkLogin" parameterType="com.lzcge.Entity.SysAdmin" resultType="com.lzcge.Entity.SysAdmin">
+            SELECT * FROM  systemadmin WHERE AdminId = #{adminId} AND AdminPassword=#{adminPassword}
+    </select>
+
+    <select id="selectById"  resultType="com.lzcge.Entity.SysAdmin">
+        SELECT * FROM  systemadmin WHERE AdminId = #{adminId}
+    </select>
+
+    <update id="updateSysAdmain">
+        UPDATE systemadmin SET
+        <trim suffixOverrides=",">
+            <if test="adminName!=null">
+                AdminName = #{adminName},
+            </if>
+            <if test="adminPassword!=null">
+                AdminPassword = #{adminPassword},
+            </if>
+            <if test="adminPhone!=null">
+                AdminPhone = #{adminPhone},
+            </if>
+            <if test="adminEmail!=null">
+                AdminEmail = #{adminEmail},
+            </if>
+
+        </trim>
+        WHERE AdminId=#{adminId}
+
+    </update>
+
+
+
+</mapper>

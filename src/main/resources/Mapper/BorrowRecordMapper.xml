@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzcge.Mapper.BorrowRecordMapper">
+
+    <select id="selReaderBorrowing" parameterType="com.lzcge.Entity.BorrowRecord" resultType="com.lzcge.Entity.BorrowRecord">
+            SELECT * FROM  BorrowRecords WHERE UserId = #{userId} AND State=0
+
+    </select>
+
+    <select id="selReaderBorrowed" parameterType="com.lzcge.Entity.BorrowRecord" resultType="com.lzcge.Entity.BorrowRecord">
+        SELECT * FROM  BorrowRecords WHERE UserId = #{userId} AND State=1
+
+    </select>
+
+    <select id="selBorrowById" resultType="com.lzcge.Entity.BorrowRecord">
+        SELECT * FROM BorrowRecords WHERE BorrowID=#{borrowID}
+    </select>
+
+    <select id="selectBorrowByBookId" parameterType="com.lzcge.Entity.BorrowRecord" resultType="com.lzcge.Entity.BorrowRecord">
+          SELECT * FROM BorrowRecords WHERE
+        <trim suffixOverrides="AND">
+              <if test="bookId!=null">
+                  BookId=#{bookId} AND
+              </if>
+            <if test="state!=null">
+                State=#{state} AND
+            </if>
+        </trim>
+
+    </select>
+
+    <select id="selectAdBorrowMoFu" parameterType="com.lzcge.Entity.BorrowRecord" resultType="com.lzcge.Entity.BorrowRecord">
+        SELECT * FROM  BorrowRecords WHERE bookId LIKE '%${bookId}%'
+        OR BookName LIKE '%${bookName}%'
+        OR UserId LIKE '%${userId}%'
+    </select>
+
+    <insert id="addBorrowRecord" parameterType="com.lzcge.Entity.BorrowRecord" useGeneratedKeys="true" keyProperty="borrowID">
+        INSERT INTO BorrowRecords (UserId,BookId,BookName,BorrowTime,ShouldTime,ReturnTime,State)
+        VALUES (#{userId},#{bookId},#{bookName},#{borrowTime},#{shouldTime},#{returnTime},'0')
+
+    </insert>
+
+    <update id="updateBorrowRecord" parameterType="com.lzcge.Entity.BorrowRecord">
+        UPDATE BorrowRecords SET
+        <trim suffixOverrides=",">
+            <if test="returnTime!=null">
+                ReturnTime = #{returnTime},
+            </if>
+            <if test="state!=null">
+                State = #{state},
+            </if>
+        </trim>
+        WHERE BookId=#{bookId} AND State='0'
+
+    </update>
+
+
+
+
+
+</mapper>

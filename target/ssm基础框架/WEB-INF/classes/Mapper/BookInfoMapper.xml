@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzcge.Mapper.BookInfoMapper">
+
+    <select id="selectAllBook" resultType="com.lzcge.Entity.BookInfo">
+        SELECT * FROM  BookInfo
+    </select>
+
+    <select id="selectByBookName" resultType="com.lzcge.Entity.BookInfo">
+        <choose>
+            <when test="BookName!=''">
+                SELECT * FROM  BookInfo WHERE BookName LIKE '%${BookName}%'
+            </when>
+            <otherwise>
+                SELECT * FROM BookInfo
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!--通过bookname来作为模糊查询的存储媒介-->
+    <select id="selectMoFuBookInfo" resultType="com.lzcge.Entity.BookInfo">
+        SELECT * FROM  BookInfo WHERE BookName LIKE '%${BookName}%'
+        OR Author LIKE '%${BookName}%'
+        OR Translator LIKE '%${BookName}%'
+        OR PublishCompany LIKE '%${BookName}%'
+    </select>
+
+    <select id="borrowCheckByISBN" resultType="com.lzcge.Entity.BookInfo">
+        SELECT * FROM BookInfo WHERE ISBNCode=#{bookISBN}
+
+    </select>
+
+    <select id="selectByBookId" resultType="com.lzcge.Entity.BookInfo">
+        SELECT * FROM BookInfo WHERE BookId=#{bookId}
+    </select>
+
+    <select id="selectEndBook" resultType="com.lzcge.Entity.BookInfo">
+        select * from bookinfo order by BookId DESC limit 1
+    </select>
+
+
+    <update id="updateBookInfo" parameterType="com.lzcge.Entity.BookInfo">
+        UPDATE BookInfo SET
+        <trim suffixOverrides=",">
+            <if test="BookName!=null">
+                BookName = #{BookName},
+            </if>
+            <if test="Author!=null">
+                Author = #{Author},
+            </if>
+            <if test="Translator!=null">
+                Translator = #{Translator},
+            </if>
+            <if test="Price>0">
+                Price = #{Price},
+            </if>
+            <if test="ISBNCode!=null">
+                ISBNCode = #{ISBNCode},
+            </if>
+            <if test="ComeUpTime!=null">
+                ComeUpTime = #{ComeUpTime},
+            </if>
+            <if test="PublishCompany!=null">
+                PublishCompany = #{PublishCompany},
+            </if>
+            <if test="EnteringMen!=null">
+                EnteringMen = #{EnteringMen},
+            </if>
+            <if test="EnteringDate!=null">
+                EnteringDate = #{EnteringDate},
+            </if>
+            <if test="State!=null">
+                State = #{State},
+            </if>
+        </trim>
+        WHERE BookId=#{BookId}
+    </update>
+
+    <insert id="insertBookInfo" parameterType="com.lzcge.Entity.BookInfo" useGeneratedKeys="true" keyProperty="borrowID">
+        INSERT INTO BookInfo (BookId,BookName,Author,Translator,Price,ISBNCode,ComeUpTime,PublishCompany,EnteringMen,EnteringDate)
+        VALUES (#{BookId},#{BookName},#{Author},#{Translator},#{Price},#{ISBNCode},#{ComeUpTime},#{PublishCompany},#{EnteringMen},#{EnteringDate})
+    </insert>
+
+    <delete id="deleteBookInfo" parameterType="com.lzcge.Entity.BookInfo">
+        DELETE FROM BookInfo WHERE BookId=#{BookId}
+    </delete>
+
+</mapper>

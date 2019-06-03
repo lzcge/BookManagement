@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzcge.Mapper.UserInfoMapper">
+
+    <select id="selectById"  resultType="com.lzcge.Entity.UserInfo">
+            SELECT * FROM  UserInfo WHERE UserId = #{UserId}
+    </select>
+
+    <select id="selectUserInfoMoFu" parameterType="com.lzcge.Entity.UserInfo" resultType="com.lzcge.Entity.UserInfo">
+         select * from UserInfo userIn
+         natural join User user WHERE userIn.UserId=user.UserId
+         AND (
+         userIn.UserId LIKE '%${UserId}%'
+        OR userIn.Departments LIKE '%${Departments}%'
+        OR userIn.Major LIKE '%${Major}%'
+        OR userIn.Phone LIKE '%${Phone}%'
+        OR userIn.Max LIKE '%${Max}%'
+        OR userIn.LendedNum LIKE '%${LendedNum}%'
+        OR userIn.Time LIKE '%${Time}%'
+        OR user.UserName LIKE '%${userName}%')
+    </select>
+
+    <update id="updateReader" parameterType="com.lzcge.Entity.UserInfo">
+        UPDATE UserInfo SET
+        <trim suffixOverrides=",">
+            <!--<if test="Phone!='' and Phone!=null">-->
+                 <!--Phone=#{Phone},-->
+            <!--</if>-->
+            <if test="Email!=null ">
+                Email=#{Email},
+            </if>
+            <if test="Departments!='' and Departments!=null">
+                Departments=#{Departments},
+            </if>
+            <if test="Major!='' and Major!=null">
+                Major=#{Major},
+            </if>
+            <if test="Phone!=null ">
+                Phone=#{Phone},
+            </if>
+            <if test="Max!='' and Max!=null">
+                Max=#{Max},
+            </if>
+            <if test="Time!='' and Time!=null">
+                Time=#{Time},
+            </if>
+        </trim>
+        WHERE UserId=#{UserId}
+
+    </update>
+
+
+    <insert id="insertUserInfo" parameterType="com.lzcge.Entity.UserInfo" useGeneratedKeys="true" keyProperty="UserId">
+        INSERT INTO UserInfo (UserId,Departments,Major,Phone,Email,Max,Time)
+        VALUES (#{UserId},#{Departments},#{Major},#{Phone},#{Email},#{Max},#{Time})
+    </insert>
+
+    <delete id="deleteUserInfo" parameterType="com.lzcge.Entity.UserInfo">
+        DELETE FROM UserInfo WHERE UserId=#{UserId}
+    </delete>
+
+
+
+
+</mapper>

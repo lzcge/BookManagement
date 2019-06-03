@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzcge.Mapper.ManagerMapper">
+
+    <select id="checkLogin" parameterType="com.lzcge.Entity.Manager" resultType="com.lzcge.Entity.Manager">
+            SELECT * FROM  bookadmin WHERE AdId = #{adId} AND AdPassword=#{adPassword}
+    </select>
+
+    <select id="selectById"  resultType="com.lzcge.Entity.Manager">
+        SELECT * FROM  bookadmin WHERE AdId = #{adId}
+    </select>
+
+    <select id="selectManagerMoFu" parameterType="com.lzcge.Entity.Manager" resultType="com.lzcge.Entity.Manager">
+        select * from bookadmin
+        WHERE AdId  LIKE '%${adId}%'
+        OR AdName LIKE '%${adName}%'
+        OR AdPhone LIKE '%${adPhone}%'
+        OR AdEmail LIKE '%${adEmail}%'
+    </select>
+
+    <update id="updateAdmain">
+        UPDATE bookadmin SET
+        <trim suffixOverrides=",">
+            <if test="adName!=null">
+                AdName = #{adName},
+            </if>
+            <if test="adPassword!=null">
+                AdPassword = #{adPassword},
+            </if>
+            <if test="adPhone!=null">
+                AdPhone = #{adPhone},
+            </if>
+            <if test="adEmail!=null">
+                AdEmail = #{adEmail},
+            </if>
+
+        </trim>
+        WHERE AdId=#{adId}
+
+    </update>
+
+    <insert id="insertManager" parameterType="com.lzcge.Entity.Manager">
+          INSERT INTO bookadmin (AdId,AdName,AdPassword,AdPhone,AdEmail)
+          VALUES (#{adId},#{adName},#{adPassword},#{adPhone},#{adEmail})
+    </insert>
+
+    <delete id="deleteManagerById" >
+        DELETE FROM bookadmin WHERE AdId=#{adId}
+    </delete>
+
+
+
+</mapper>

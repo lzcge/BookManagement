@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzcge.Mapper.UserMapper">
+
+    <select id="checkLogin" parameterType="com.lzcge.Entity.User" resultType="com.lzcge.Entity.User">
+            SELECT * FROM  User WHERE UserId = #{userId} AND PassWord=#{passWord}
+
+    </select>
+
+    <select id="selectUserMoFu" parameterType="com.lzcge.Entity.User" resultType="com.lzcge.Entity.User">
+        SELECT * FROM  User WHERE  UserName LIKE '%${userName}%'
+    </select>
+
+    <select id="selectByUId"  resultType="com.lzcge.Entity.User">
+        SELECT * FROM  User WHERE UserId = #{UserId}
+    </select>
+
+    <update id="updatePassWord" parameterType="com.lzcge.Entity.UserInfo">
+        UPDATE User SET
+        <trim suffixOverrides=",">
+            <if test="userName!='' and userName!=null">
+                UserName=#{userName},
+            </if>
+            <if test="passWord!='' and passWord!=null">
+                PassWord=#{passWord},
+            </if>
+        </trim>
+        WHERE UserId=#{UserId}
+
+    </update>
+
+    <insert id="insertUser" parameterType="com.lzcge.Entity.UserInfo" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO User (UserId,UserName,PassWord)
+        VALUES (#{userId},#{userName},#{passWord})
+    </insert>
+
+    <delete id="deleteUser" parameterType="com.lzcge.Entity.UserInfo">
+        DELETE FROM User WHERE UserId=#{userId}
+    </delete>
+
+</mapper>
